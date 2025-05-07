@@ -2,8 +2,8 @@ int Pin1 = 10;//IN1 is connected to 10
 int Pin2 = 11;//IN2 is connected to 11  
 int Pin3 = 12;//IN3 is connected to 12  
 int Pin4 = 13;//IN4 is connected to 13 
-int switchCW  =2;//define input pin for CW push button
-int switchCCW =3;//define input pin for CCW push button
+int switchCW  =51;//define input pin for CW push button
+int switchCCW =53;//define input pin for CCW push button
 
  
 int pole1[] ={0,0,0,0, 0,1,1,1, 0};//pole1, 8 step values
