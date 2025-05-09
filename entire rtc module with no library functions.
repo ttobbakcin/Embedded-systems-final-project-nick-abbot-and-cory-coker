@@ -1,0 +1,84 @@
+#include <RTClib.h>
+
+
+#define RDA 0x80
+#define TBE 0x20 
+
+volatile unsigned char *myUCSR0A = (unsigned char *)0x00C0;
+volatile unsigned char *myUCSR0B = (unsigned char *)0x00C1;
+volatile unsigned char *myUCSR0C = (unsigned char *)0x00C2;
+volatile unsigned int  *myUBRR0  = (unsigned int *) 0x00C4;
+volatile unsigned char *myUDR0   = (unsigned char *)0x00C6;
+ 
+RTC_DS1307 rtc;
+
+
+void setup () {
+  Serial.begin(9600);
+
+  // SETUP RTC MODULE
+  if (! rtc.begin()) {
+    Serial.flush();
+    while (1);
+  }
+}
+
+void loop () {
+
+  DateTime now = rtc.now();
+ int month= now.month();
+ int day= now.day();
+ int year= now.year();
+ int hour= now.hour();
+ int minute= now.minute();
+ int second= now.second();
+
+U0putnumber(month);
+ U0putchar('/');
+U0putnumber(day);
+  U0putchar('/');
+U0putnumber(year);
+  U0putchar(' ');
+U0putnumber(hour);
+  U0putchar(':');
+U0putnumber(minute);
+  U0putchar(':');
+U0putnumber(second);
+U0putchar('\n');
+  delay(1000); // delay 1 seconds
+}
+
+unsigned char U0kbhit()
+{
+  return *myUCSR0A & RDA;
+}
+unsigned char U0getchar()
+{
+  return *myUDR0;
+}
+void U0putchar(unsigned char U0pdata)
+{
+  while((*myUCSR0A & TBE)==0);
+  *myUDR0 = U0pdata;
+}
+
+void U0putnumber(int num) {
+  char digit;
+
+if (num == 0) {
+    U0putchar('0');
+    return;
+  }
+char temp[10];
+  int i = 0;
+
+  while (num > 0) {
+    temp[i++] = '0' + (num % 10);
+    num /= 10;
+  }
+
+  while (i--) {
+    U0putchar(temp[i]);
+  }
+}
+
