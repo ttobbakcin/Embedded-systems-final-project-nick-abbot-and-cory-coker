@@ -18,7 +18,7 @@ void setup () {
 
   // SETUP RTC MODULE
   if (! rtc.begin()) {
-    Serial.flush();
+    flushUSART0();
     while (1);
   }
 }
@@ -82,3 +82,8 @@ char temp[10];
   }
 }
 
+void flushUSART0() {
+  while (UCSR0A & (1 << RXC0)) {
+    volatile uint8_t dummy = UDR0;
+  }
+}
